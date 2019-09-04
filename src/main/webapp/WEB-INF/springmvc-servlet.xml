@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+          http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+          http://www.springframework.org/schema/context 
+          http://www.springframework.org/schema/context/spring-context-4.3.xsd
+          http://www.springframework.org/schema/mvc
+          http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+">
+    <context:annotation-config />
+    <context:component-scan 
+        base-package="com.mycompany.jv30_hotel" />
+        
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/" />
+        <property name="suffix" value=".jsp" />
+        <property name="order" value="1" />
+    </bean>
+    
+    <mvc:annotation-driven validator="validator"/>
+    <mvc:resources mapping="/webjars/**" location="/webjars/" />
+    <mvc:resources mapping="/resources/**" location="/resources/" />
+    <mvc:resources mapping="/resources_b/**"
+                   location="/resources_b/" />
+    
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="validationMessageSource" ref="messageSource" />
+    </bean>
+    <bean id="messageSource" 
+          class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basename" value="classpath:messages" />
+    </bean>
+    <!--    Upload-->
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!--<property name="maxUploadSize" value="1000000" />-->
+    </bean>
+    <!--    Mail-->
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="smtp.gmail.com" />
+        <property name="port" value="587" />
+        <property name="username" value="tho.buyn.hotel@gmail.com" />
+        <property name="password" value="thobuynhotel" />
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.transport.protocol">smtp</prop>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.smtp.starttls.enable">true</prop>
+                <prop key="mail.smtp.ssl.trust">smtp.gmail.com</prop>
+            </props>
+        </property>
+    </bean>
+    <!--    Bean ExportXML-->
+    <bean class="org.springframework.web.servlet.view.XmlViewResolver">
+        <property name="location">
+            <value>/WEB-INF/spring-excel-views.xml</value>
+        </property>
+        <property name="order" value="0" />
+    </bean>
+</beans>
